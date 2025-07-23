@@ -74,11 +74,13 @@ static void	draw_wall_column(t_ray *ray, int i)
 	line_height = (double)(64 / ray->distance) * D;
 	draw_begin = (WINDOW_HEIGHT / 2) - (line_height / 2);
 	draw_end = draw_begin + line_height;
+	if (draw_begin < 0)
+		draw_begin = 0;
 	if (draw_end > WINDOW_HEIGHT)
 		draw_end = WINDOW_HEIGHT;
-	draw_line(ray->game->img, i, 0, i, draw_end, 0x9eedfc);
+	draw_line(ray->game->img, i, 0, i, draw_begin - 1, 0x9eedfc);
 	// CIEL
-	draw_line(ray->game->img, i, draw_end + 1, i, WINDOW_HEIGHT, 0xcfcfcf);
+	draw_line(ray->game->img, i, draw_end + 1, i, WINDOW_HEIGHT - 1, 0xcfcfcf);
 	// SOL
 	draw_line(ray->game->img, i, draw_begin, i, draw_end, 0x3b2b65);
 	// MUR
