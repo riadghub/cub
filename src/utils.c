@@ -24,7 +24,9 @@ int	ft_tablen(char **str)
 
 int	has_wall_at(t_data *game, int x, int y)
 {
-	if (x < 0 || y < 0 || y >= game->map_height || x >= ft_str_len(game->map[y]))
+	if (x < 0 || y < 0 || y >= game->map_height)
+		return (1);
+	if (x >= ft_str_len(game->map[y]))
 		return (1);
 	return (game->map[y][x] == '1');
 }

@@ -51,11 +51,11 @@ static void	cast_single_ray(t_ray *ray, int i)
 	map_y = (int)(ray->end_y / TILESIZE);
 	
 	// Calculate delta distances
-	if (cos(ray->ray_angle) == 0)
+	if (fabs(cos(ray->ray_angle)) < 1e-10)
 		delta_dist_x = 1e30;
 	else
 		delta_dist_x = fabs(1 / cos(ray->ray_angle));
-	if (sin(ray->ray_angle) == 0)
+	if (fabs(sin(ray->ray_angle)) < 1e-10)
 		delta_dist_y = 1e30;
 	else
 		delta_dist_y = fabs(1 / sin(ray->ray_angle));
@@ -84,7 +84,8 @@ static void	cast_single_ray(t_ray *ray, int i)
 	
 	// Perform DDA
 	hit = 0;
-	while (hit == 0)
+	int max_iterations = 1000; // Safety limit
+	while (hit == 0 && max_iterations > 0)
 	{
 		// Jump to next map square, either in x-direction, or in y-direction
 		if (side_dist_x < side_dist_y)
@@ -102,16 +103,31 @@ static void	cast_single_ray(t_ray *ray, int i)
 		// Check if ray has hit a wall
 		if (has_wall_at(ray->game, map_x, map_y))
 			hit = 1;
+		max_iterations--;
 	}
 	
 	// Calculate distance
 	if (side == 0)
-		ray->distance = (map_x - ray->end_x / TILESIZE + (1 - step_x) / 2) / cos(ray->ray_angle);
+	{
+		if (fabs(cos(ray->ray_angle)) < 1e-10)
+			ray->distance = 1e30;
+		else
+			ray->distance = (map_x - ray->end_x / TILESIZE + (1 - step_x) / 2) / cos(ray->ray_angle);
+	}
 	else
-		ray->distance = (map_y - ray->end_y / TILESIZE + (1 - step_y) / 2) / sin(ray->ray_angle);
+	{
+		if (fabs(sin(ray->ray_angle)) < 1e-10)
+			ray->distance = 1e30;
+		else
+			ray->distance = (map_y - ray->end_y / TILESIZE + (1 - step_y) / 2) / sin(ray->ray_angle);
+	}
 		
-	// Make distance positive
+	// Make distance positive and scale
 	ray->distance = fabs(ray->distance * TILESIZE);
+	
+	// Ensure distance is reasonable
+	if (ray->distance > 10000)
+		ray->distance = 10000;
 }
 
 static void	draw_wall_column(t_ray *ray, int i)
