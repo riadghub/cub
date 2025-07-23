@@ -44,11 +44,10 @@ int	gamemlx(t_data *game, char *map, char *argv[])
 void	rendering(t_data *game, int x)
 {
 	int	line_height;
-	int	draw_begin;
 
 	(void)x;
 	line_height = (32 / game->ray->distance) * D;
-	draw_begin = (WINDOW_HEIGHT / 2) - (line_height / 2);
+	(void)line_height;
 }
 
 void	render_map(t_data *game)
