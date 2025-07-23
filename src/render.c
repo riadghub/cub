@@ -49,7 +49,6 @@ void	rendering(t_data *game, int x)
 	(void)x;
 	line_height = (32 / game->ray->distance) * D;
 	draw_begin = (WINDOW_HEIGHT / 2) - (line_height / 2);
-	(void)draw_begin;
 }
 
 void	render_map(t_data *game)

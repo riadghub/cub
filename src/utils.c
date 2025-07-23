@@ -6,11 +6,9 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:34:46 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/07/11 11:35:08 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:29:43 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "cub3d.h"
 
 #include "cub3d.h"
 
@@ -26,5 +24,9 @@ int	ft_tablen(char **str)
 
 int	has_wall_at(t_data *game, int x, int y)
 {
-	return ((game->map[y % TILESIZE][x % TILESIZE]) == '1');
+	if (x < 0 || y < 0 || y >= game->map_height)
+		return (1);
+	if (x >= (int)ft_strlen(game->map[y]))
+		return (1);
+	return (game->map[y][x] == '1');
 }

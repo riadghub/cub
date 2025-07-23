@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 10:29:54 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/07/23 11:16:36 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:31:26 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ typedef struct s_ray
 	double				end_y;
 	double				step_x;
 	double				step_y;
+	int					map_x;
+	int					map_y;
+	double				side_dist_x;
+	double				side_dist_y;
 	t_data				*game;
 }						t_ray;
 

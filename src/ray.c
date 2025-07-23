@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:25:07 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/07/23 14:05:58 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:34:48 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void	setup_ray(t_ray *ray, int i)
 {
 	ray->ray_angle = ray->start_angle + i * ray->angle_step;
 	ray->ray_angle = normalize_angle(ray->ray_angle);
-	ray->step_x = cos(ray->ray_angle) * 0.15;
-	ray->step_y = sin(ray->ray_angle) * 0.15;
+	ray->step_x = cos(ray->ray_angle) * 0.05;
+	ray->step_y = sin(ray->ray_angle) * 0.05;
 	ray->end_x = ray->game->player.x;
 	ray->end_y = ray->game->player.y;
 }
