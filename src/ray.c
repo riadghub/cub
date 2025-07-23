@@ -20,6 +20,18 @@ static double	normalize_angle(double angle)
 	return (angle);
 }
 
+static double	get_angle_difference(double angle1, double angle2)
+{
+	double	diff;
+
+	diff = angle1 - angle2;
+	if (diff > M_PI)
+		diff -= 2 * M_PI;
+	else if (diff < -M_PI)
+		diff += 2 * M_PI;
+	return (diff);
+}
+
 void	init_ray(t_data *game, double angle)
 {
 	game->ray->ray_angle = normalize_angle(angle);
@@ -69,7 +81,7 @@ static void	draw_wall_column(t_ray *ray, int i)
 	int		draw_end;
 	double	angle_diff;
 
-	angle_diff = ray->ray_angle - ray->game->player.rotationAngle;
+	angle_diff = get_angle_difference(ray->ray_angle, ray->game->player.rotationAngle);
 	ray->distance = ray->distance * cos(angle_diff);
 	line_height = (double)(64 / ray->distance) * D;
 	draw_begin = (WINDOW_HEIGHT / 2) - (line_height / 2);

@@ -1,0 +1,21 @@
+# Executable
+cub3D
+
+# Object files
+*.o
+
+# Static libraries
+*.a
+
+# Build directories
+libft/*.o
+libft/*.a
+get_next_line/*.o
+
+# Temporary files
+*.tmp
+*~
+
+# System files
+.DS_Store
+Thumbs.db
