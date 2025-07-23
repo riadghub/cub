@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 10:29:54 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/07/23 14:31:26 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:38:41 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define WINDOW_WIDTH 1080
 # define WINDOW_HEIGHT 720
 # define D WINDOW_WIDTH / (tan(30))
-# define FOV 90 * (M_PI / 180)
+# define FOV 60 * (M_PI / 180)
 # define RES 1
 # define NUM_RAYS WINDOW_WIDTH
 # define WALL_PATH "textures/wall.xpm"

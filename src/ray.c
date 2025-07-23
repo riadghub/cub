@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:25:07 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/07/23 14:34:48 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:48:07 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void	setup_ray(t_ray *ray, int i)
 {
 	ray->ray_angle = ray->start_angle + i * ray->angle_step;
 	ray->ray_angle = normalize_angle(ray->ray_angle);
-	ray->step_x = cos(ray->ray_angle) * 0.05;
-	ray->step_y = sin(ray->ray_angle) * 0.05;
+	ray->step_x = cos(ray->ray_angle) * 0.15;
+	ray->step_y = sin(ray->ray_angle) * 0.15;
 	ray->end_x = ray->game->player.x;
 	ray->end_y = ray->game->player.y;
 }
@@ -74,14 +74,17 @@ static void	draw_wall_column(t_ray *ray, int i)
 	line_height = (double)(64 / ray->distance) * D;
 	draw_begin = (WINDOW_HEIGHT / 2) - (line_height / 2);
 	draw_end = draw_begin + line_height;
+	// Add bounds checking
+	if (draw_begin < 0)
+		draw_begin = 0;
 	if (draw_end > WINDOW_HEIGHT)
 		draw_end = WINDOW_HEIGHT;
-	draw_line(ray->game->img, i, 0, i, draw_end, 0x9eedfc);
-	// CIEL
-	draw_line(ray->game->img, i, draw_end + 1, i, WINDOW_HEIGHT, 0xcfcfcf);
-	// SOL
+	// Draw ceiling (sky) - only up to where wall begins
+	draw_line(ray->game->img, i, 0, i, draw_begin, 0x9eedfc);
+	// Draw floor - only from where wall ends
+	draw_line(ray->game->img, i, draw_end, i, WINDOW_HEIGHT, 0xcfcfcf);
+	// Draw wall - this will overwrite the boundary pixels
 	draw_line(ray->game->img, i, draw_begin, i, draw_end, 0x3b2b65);
-	// MUR
 }
 
 void	render(t_ray *ray)
