@@ -1,0 +1,9 @@
+# Build artifacts
+*.o
+cub3D
+libft/libft.a
+minilibx-linux/libmlx.a
+
+# Temporary files
+*~
+.DS_Store

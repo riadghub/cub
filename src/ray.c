@@ -29,37 +29,89 @@ static void	setup_ray(t_ray *ray, int i)
 {
 	ray->ray_angle = ray->start_angle + i * ray->angle_step;
 	ray->ray_angle = normalize_angle(ray->ray_angle);
-	ray->step_x = cos(ray->ray_angle) * 0.15;
-	ray->step_y = sin(ray->ray_angle) * 0.15;
 	ray->end_x = ray->game->player.x;
 	ray->end_y = ray->game->player.y;
 }
 
 static void	cast_single_ray(t_ray *ray, int i)
 {
-	int	steps;
-	int	max_distance;
-	int	map_x;
-	int	map_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	int		side;
 
-	max_distance = 99999;
 	setup_ray(ray, i);
-	steps = 0;
-	while (steps < max_distance)
+	map_x = (int)(ray->end_x / TILESIZE);
+	map_y = (int)(ray->end_y / TILESIZE);
+	
+	// Calculate delta distances
+	if (cos(ray->ray_angle) == 0)
+		delta_dist_x = 1e30;
+	else
+		delta_dist_x = fabs(1 / cos(ray->ray_angle));
+	if (sin(ray->ray_angle) == 0)
+		delta_dist_y = 1e30;
+	else
+		delta_dist_y = fabs(1 / sin(ray->ray_angle));
+	
+	// Calculate step direction and initial sideDist
+	if (cos(ray->ray_angle) < 0)
 	{
-		ray->end_x += ray->step_x;
-		ray->end_y += ray->step_y;
-		map_x = (int)(ray->end_x / TILESIZE);
-		map_y = (int)(ray->end_y / TILESIZE);
-		if (map_x < 0 || map_x >= WINDOW_WIDTH || map_y < 0
-			|| map_y >= WINDOW_HEIGHT || ray->game->map[map_y][map_x] == '1')
-		{
-			ray->distance = sqrt(pow(ray->end_x - ray->game->player.x, 2)
-					+ pow(ray->end_y - ray->game->player.y, 2));
-			break ;
-		}
-		steps++;
+		step_x = -1;
+		side_dist_x = (ray->end_x / TILESIZE - map_x) * delta_dist_x;
 	}
+	else
+	{
+		step_x = 1;
+		side_dist_x = (map_x + 1.0 - ray->end_x / TILESIZE) * delta_dist_x;
+	}
+	if (sin(ray->ray_angle) < 0)
+	{
+		step_y = -1;
+		side_dist_y = (ray->end_y / TILESIZE - map_y) * delta_dist_y;
+	}
+	else
+	{
+		step_y = 1;
+		side_dist_y = (map_y + 1.0 - ray->end_y / TILESIZE) * delta_dist_y;
+	}
+	
+	// Perform DDA
+	hit = 0;
+	while (hit == 0)
+	{
+		// Jump to next map square, either in x-direction, or in y-direction
+		if (side_dist_x < side_dist_y)
+		{
+			side_dist_x += delta_dist_x;
+			map_x += step_x;
+			side = 0;
+		}
+		else
+		{
+			side_dist_y += delta_dist_y;
+			map_y += step_y;
+			side = 1;
+		}
+		// Check if ray has hit a wall
+		if (has_wall_at(ray->game, map_x, map_y))
+			hit = 1;
+	}
+	
+	// Calculate distance
+	if (side == 0)
+		ray->distance = (map_x - ray->end_x / TILESIZE + (1 - step_x) / 2) / cos(ray->ray_angle);
+	else
+		ray->distance = (map_y - ray->end_y / TILESIZE + (1 - step_y) / 2) / sin(ray->ray_angle);
+		
+	// Make distance positive
+	ray->distance = fabs(ray->distance * TILESIZE);
 }
 
 static void	draw_wall_column(t_ray *ray, int i)

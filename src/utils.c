@@ -12,8 +12,6 @@
 
 #include "cub3d.h"
 
-#include "cub3d.h"
-
 int	ft_tablen(char **str)
 {
 	int	i;
@@ -26,5 +24,7 @@ int	ft_tablen(char **str)
 
 int	has_wall_at(t_data *game, int x, int y)
 {
-	return ((game->map[y % TILESIZE][x % TILESIZE]) == '1');
+	if (x < 0 || y < 0 || y >= game->map_height || x >= ft_str_len(game->map[y]))
+		return (1);
+	return (game->map[y][x] == '1');
 }
