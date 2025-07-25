@@ -129,7 +129,7 @@ int	check_path(t_data *data)
 	if (!map_copy)
 		return (0);
 	valid = 1;
-	flood_fill(map_copy, data->player.x, data->player.y, data, &valid);
+	flood_fill(map_copy, data->player.pos[0], data->player.pos[1], data, &valid);
 	free_copy(map_copy, data->map_height);
 	return (valid);
 }

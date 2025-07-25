@@ -158,8 +158,8 @@ int check_player_not_trapped(t_data *data)
 	int y;
 	int accessible_neighbors;
 
-	x = data->player.x;
-	y = data->player.y;
+	x = data->player.pos[0];
+	y = data->player.pos[1];
 	accessible_neighbors = 0;
 
 	if (x > 0 && data->map[y][x - 1] == '0')

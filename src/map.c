@@ -63,24 +63,24 @@ static int	count_players(t_data *data, int *player_x, int *player_y,
 	return (count);
 }
 
-int	find_player(t_data *data)
+int find_player(t_data *data)
 {
-	int		count;
-	int		player_x;
-	int		player_y;
-	char	player_direction;
-
-	count = count_players(data, &player_x, &player_y, &player_direction);
-	if (count == 0)
-		return (printf("Error: No player found in map (N, S, E, or W required)\n"), 0);
-	else if (count > 1)
-		return (printf("Error: Multiple players found (%d players). Only one allowed\n",
-			count), 0);
-	data->player.x = player_x;
-	data->player.y = player_y;
-	data->player.direction = player_direction;
-	data->map[player_y][player_x] = '0';
-	return (1);
+    int count;
+    int player_x;
+    int player_y;
+    char player_direction;
+    
+    count = count_players(data, &player_x, &player_y, &player_direction);
+    
+    if (count == 0)
+        return (printf("Error: No player found in map (N, S, E, or W required)\n"), 0);
+    else if (count > 1)
+        return (printf("Error: Multiple players found (%d players). Only one allowed\n", count), 0);
+    data->player.pos[0] = player_x;        // X → pos[0]
+    data->player.pos[1] = player_y;        // Y → pos[1]
+    data->player.direction = player_direction;
+    data->map[player_y][player_x] = '0';
+    return (1);
 }
 
 int	check_content(t_data *data)

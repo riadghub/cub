@@ -13,9 +13,10 @@
 # define ARROW_LEFT XK_Left   // = 65361
 # define ARROW_RIGHT XK_Right // = 65363
 
-void	draw_line(t_img *img, int beginX, int beginY, int endX, int endY,
-			int color);
+void draw_line(t_data *game, int beginX, int beginY, int endX, int endY, int color);
 void	update(int key, t_data *game);
+void 	rotate_player(t_data *game, double angle);
+
 double	get_rotation_angleY(t_data *data);
 double	get_rotation_angleX(t_data *data);
 

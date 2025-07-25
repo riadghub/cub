@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 16:41:33 by lsadi             #+#    #+#             */
-/*   Updated: 2025/07/22 13:50:50 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:42:34 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,39 @@ typedef struct s_config
 	char		*texture_south;
 	char		*texture_west;
 	char		*texture_est;
+	void		*texture_north_img;
+	void		*texture_south_img;
+	void		*texture_west_img;
+	void		*texture_est_img;
 	int			floor_color;
 	int			ceiling_color;
+	int			last_wall_hit;
 }				t_config;
+
+// typedef struct s_player
+// {
+// 	double		x;
+// 	double		y;
+// 	int			turnDirection;
+// 	int			walkDirection;
+// 	double		rotationSpeed;
+// 	double		rotationAngle;
+// 	double		moveSpeed;
+// 	char 		direction; // N, S, E, W
+// 	char		*texture_player;
+// }				t_player;
 
 typedef struct s_player
 {
-	double		x;
-	double		y;
-	int			turnDirection;
-	int			walkDirection;
-	double		rotationSpeed;
-	double		rotationAngle;
-	double		moveSpeed;
-	char direction; // N, S, E, W
-	char		*texture_player;
+	double pos[2];        // [X, Y] - Position en pixels
+	double dir[2];        // [X, Y] - Vecteur direction normalisé
+	double plane[2];      // [X, Y] - Plan perpendiculaire à dir pour FOV
+	int turnDirection;    // -1, 0, 1 pour rotation
+	int walkDirection;    // -1, 0, 1 pour mouvement
+	double moveSpeed;     // Vitesse de déplacement
+	double rotationSpeed; // Vitesse de rotation
+	char direction;       // N, S, E, W (pour le parsing initial)
+	char *texture_player; // Texture du joueur
 }				t_player;
 
 typedef struct s_data
@@ -62,7 +80,6 @@ typedef struct s_data
 	int			map_width;
 	int			map_height;
 	t_player	player;
-	t_ray		*ray;
 	t_img		*img;
 }				t_data;
 
@@ -75,18 +92,19 @@ typedef struct s_data
 
 // ========== FONCTIONS DE PARSING ==========
 int				parse_file(const char *filename, t_data *data);
-int 			process_line(char *line, t_data *data);
+int				process_line(char *line, t_data *data);
 int				is_color_line(char *line);
 int				get_rgb_value(char *rgb_str);
 int				convert_rgb(char *line);
-int 			parse_color_line(char *line, t_config *config);
+int				parse_color_line(char *line, t_config *config);
 int				is_texture_line(char *line);
 int				parse_texture_line(char *line, t_config *config);
-char 			*extract_texture_path(char *trimmed);
-int 			assign_texture(char *trimmed, char *path, t_config *config);
-int 			assign_texture_by_direction(t_config *config, char *path, char *direction);
+char			*extract_texture_path(char *trimmed);
+int				assign_texture(char *trimmed, char *path, t_config *config);
+int				assign_texture_by_direction(t_config *config, char *path,
+					char *direction);
 int				is_map_line(char *line);
-int 			validate_order(t_data *data);
+int				validate_order(t_data *data);
 
 // ========== FONCTIONS DE GESTION DE CARTE ==========
 void			add_map_line(t_data *data, char *line);

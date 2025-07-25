@@ -6,7 +6,7 @@
 /*   By: reeer-aa <reeer-aa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 10:29:54 by reeer-aa          #+#    #+#             */
-/*   Updated: 2025/07/23 15:13:37 by reeer-aa         ###   ########.fr       */
+/*   Updated: 2025/07/25 11:21:03 by reeer-aa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "mlx_int.h"
 # include <math.h>
 
+# define SIZE2 100
 # define TILESIZE 48
 # define ROWS 10
 # define COLS 15
@@ -25,31 +26,13 @@
 # define D WINDOW_WIDTH / (tan(30))
 # define FOV 60 * (M_PI / 180)
 # define RES 1
-# define NUM_RAYS WINDOW_WIDTH
+# define NUM_RAYS (WINDOW_WIDTH * 4)
+//# define NUM_RAYS WINDOW_WIDTH
 # define WALL_PATH "textures/wall.xpm"
 # define FLOOR_PATH "textures/tile.xpm"
 # define PLAYER_PATH "textures/red_dot.xpm"
 
 typedef struct s_data	t_data;
-
-typedef struct s_ray
-{
-	double				x;
-	double				y;
-	double				distance;
-	double				start_angle;
-	double				angle_step;
-	double				ray_angle;
-	double				end_x;
-	double				end_y;
-	double				step_x;
-	double				step_y;
-	int					map_x;
-	int					map_y;
-	double				side_dist_x;
-	double				side_dist_y;
-	t_data				*game;
-}						t_ray;
 
 int						close_game(t_data *game);
 int						has_wall_at(t_data *game, int x, int y);
@@ -59,11 +42,18 @@ int						load_all_textures(t_data *game);
 void					destroy_all(t_data *game);
 void					free_textures(t_data *game);
 void					init_player(t_data *game);
-void					init_ray(t_data *game, double angle);
 void					*load_texture(void *mlx, char *path);
 void					rendering(t_data *game, int x);
 void					render_map(t_data *game);
-void					render(t_ray *ray);
+
+int blend_colors(int color1, int color2, double alpha);
+void draw_wall_column(t_data *game, int x, double distance);
+void render(t_data *game);
+double cast_ray_dda(t_data *game, double ray_dir_x, double ray_dir_y);
+void put_pixel(t_data *game, int x, int y, int color);
+int blend_colors(int color1, int color2, double alpha);
+void render_map(t_data *game);
+int darken_color(int original_color, double ratio);
 
 int						init_main_image(t_data *game);
 void					put_pixel_to_image(t_img *img, int x, int y, int color);
